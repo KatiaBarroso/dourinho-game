@@ -188,3 +188,46 @@
   position: static;
   margin-top: 12px;
 }
+
+/* Impressão do certificado: a classe .modo-impressao é posta no <html> pelos
+   eventos beforeprint/afterprint (index.html). Só o canvas da Unity fica
+   visível, em 16:9, centralizado na horizontal e na vertical da folha.
+   O !important sobrepõe o width/height inline que redimensionarCanvas() aplica. */
+@media print {
+  @page {
+    size: landscape;
+    margin: 0;
+  }
+
+  html.modo-impressao,
+  html.modo-impressao body {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+  }
+
+  html.modo-impressao body {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  html.modo-impressao body > *:not(#unity-canvas) {
+    display: none !important;
+  }
+
+  html.modo-impressao #unity-canvas {
+    display: block !important;
+    position: static !important;
+    transform: none !important;
+    margin: auto !important;
+    width: min(100vw, calc(100vh * 16 / 9)) !important;
+    height: min(100vh, calc(100vw * 9 / 16)) !important;
+    background: transparent !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

@@ -148,8 +148,22 @@
 }
 
 // Executa ao carregar a página e sempre que a janela mudar de tamanho
-window.addEventListener('resize', redimensionarCanvas);
+window.addEventListener('resize', () => {
+  // Durante a impressão o navegador dispara resize com o tamanho da folha;
+  // o layout de impressão fica a cargo do CSS (.modo-impressao).
+  if (document.documentElement.classList.contains('modo-impressao')) return;
+  redimensionarCanvas();
+});
 window.addEventListener('load', redimensionarCanvas);
+
+// Impressão do certificado: só o canvas da Unity aparece, centralizado na folha.
+window.addEventListener('beforeprint', () => {
+  document.documentElement.classList.add('modo-impressao');
+});
+window.addEventListener('afterprint', () => {
+  document.documentElement.classList.remove('modo-impressao');
+  redimensionarCanvas();
+});
 
 // window.addEventListener('resize', redimensionarCanvas);
 // redimensionarCanvas(); // Executa ao carregar
